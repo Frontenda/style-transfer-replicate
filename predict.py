@@ -23,9 +23,7 @@ class Predictor(BasePredictor):
         style_image: Path = Input(description="Style image"),
         content_image: Path = Input(description="Content image"),
         prompt: str = Input(description="Prompt", default=""),
-        negative_prompt: str = Input(
-            description="Negative prompt", default=""
-        ),
+        negative_prompt: str = Input(description="Negative prompt", default=""),
         seed: int = Input(description="Seed", default=-1),
         steps: int = Input(description="Steps", default=30),
         num_images_per_prompt: int = Input(
@@ -35,12 +33,13 @@ class Predictor(BasePredictor):
         if seed == -1:
             seed = random.randint(0, 1e9)
         generator = torch.Generator(device="cuda").manual_seed(seed)
+        control_images = preprocess_image(content_image)
         images = self.pipe(
             prompt=prompt,
             generator=generator,
             negative_prompt=negative_prompt,
             controlnet_conditioning_scale=0.8,
-            image=content_image,
+            image=control_images,
             ip_adapter_image=style_image,
             num_inference_steps=steps,
             num_images_per_prompt=num_images_per_prompt,
