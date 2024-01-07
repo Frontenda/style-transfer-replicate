@@ -33,10 +33,19 @@ class Predictor(BasePredictor):
     ) -> List[Path]:
         if seed == -1:
             seed = random.randint(0, 1e9)
-        content_image = Image.open(content_image)
-        style_image = Image.open(style_image)
+        content_image = Image.open(content_image).convert("RGB")
+        width, height = content_image.size
+        style_image = Image.open(style_image).convert("RGB")
         generator = torch.Generator(device="cuda").manual_seed(seed)
         control_images = preprocess_image(content_image)
+        if width < height:
+            width = BASE_SIZE["sd"]
+            height = int(BASE_SIZE["sd"] * (height / width))
+            height = (height // 8) * 8
+        else:
+            height = BASE_SIZE["sd"]
+            width = int(BASE_SIZE["sd"] * (width / height))
+            width = (width // 8) * 8
         images = self.pipe(
             prompt=prompt,
             generator=generator,
@@ -46,6 +55,8 @@ class Predictor(BasePredictor):
             ip_adapter_image=style_image,
             num_inference_steps=steps,
             num_images_per_prompt=num_images_per_prompt,
+            width=width,
+            height=height,
         ).images
         paths = []
         for i, image in enumerate(images):
