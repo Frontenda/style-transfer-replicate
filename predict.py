@@ -22,14 +22,14 @@ class Predictor(BasePredictor):
         self,
         style_image: Path = Input(description="Style image"),
         content_image: Path = Input(description="Content image"),
-        prompt: str = Input(description="Prompt", type=str, default=""),
+        prompt: str = Input(description="Prompt", default=""),
         negative_prompt: str = Input(
-            description="Negative prompt", type=str, default=""
+            description="Negative prompt", default=""
         ),
-        seed: int = Input(description="Seed", type=int, default=-1),
-        steps: int = Input(description="Steps", type=int, default=30),
+        seed: int = Input(description="Seed", default=-1),
+        steps: int = Input(description="Steps", default=30),
         num_images_per_prompt: int = Input(
-            description="Number of images per prompt", type=int, default=1, max=4, min=1
+            description="Number of images per prompt", default=1, le=4, ge=1
         ),
     ) -> List[Path]:
         if seed == -1:
