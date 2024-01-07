@@ -27,8 +27,8 @@ def load_pipeline():
 
 def preprocess_image(image):
     processors = [
-        Processor("depth_midas").to("cuda"),
-        Processor("mlsd").to("cuda"),
+        Processor("depth_midas"),
+        Processor("mlsd"),
     ]
     control_images = [processor(image, to_pil=True) for processor in processors]
     return control_images

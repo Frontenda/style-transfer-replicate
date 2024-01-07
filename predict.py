@@ -6,6 +6,7 @@ from pipeline_sd import load_pipeline, preprocess_image
 import torch
 import random
 from typing import List
+from PIL import Image
 
 BASE_SIZE = {
     "sd": 512,
@@ -32,6 +33,8 @@ class Predictor(BasePredictor):
     ) -> List[Path]:
         if seed == -1:
             seed = random.randint(0, 1e9)
+        content_image = Image.open(content_image)
+        style_image = Image.open(style_image)
         generator = torch.Generator(device="cuda").manual_seed(seed)
         control_images = preprocess_image(content_image)
         images = self.pipe(
