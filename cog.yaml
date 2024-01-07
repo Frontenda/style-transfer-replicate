@@ -23,9 +23,9 @@ build:
     - pillow
 
   # commands run after the environment is setup
-  # run:
-  #   - "echo env is ready!"
-  #   - "echo another command if needed"
-
+  run:
+    - wget "https://civitai.com/api/download/models/245598?type=Model&format=SafeTensor&size=pruned&fp=fp16" --content-disposition -O sd.safetensors
+    - wget "https://huggingface.co/lllyasviel/control_v11f1p_sd15_depth/resolve/main/diffusion_pytorch_model.fp16.safetensors?download=true" --content-disposition -O depth.safetensors
+    - wget "https://huggingface.co/lllyasviel/control_v11p_sd15_mlsd/resolve/main/diffusion_pytorch_model.fp16.safetensors?download=true" --content-disposition -O mlsd.safetensors
 # predict.py defines how predictions are run on your model
 predict: "predict.py:Predictor"
