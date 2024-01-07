@@ -1,0 +1,6 @@
+controlnet-aux==0.0.7
+diffusers
+omegaconf
+transfomers
+accelerate
+pillow
