@@ -5,7 +5,7 @@ from controlnet_aux.processor import Processor
 
 def load_pipeline():
     controlnet = [
-        ControlNetModel.from_single_file(
+        ControlNetModel.from_pretrained(
             "lllyasviel/control_v11f1p_sd15_depth", torch_dtype=torch.float16
         ),
         ControlNetModel.from_pretrained(
