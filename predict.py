@@ -9,8 +9,8 @@ from typing import List
 from PIL import Image
 
 BASE_SIZE = {
-    "sd": 512,
-    "1024": 768,
+    "sd": 1024,
+    "1024": 1024,
 }
 
 
@@ -34,17 +34,17 @@ class Predictor(BasePredictor):
         if seed == -1:
             seed = random.randint(0, 1e9)
         content_image = Image.open(content_image).convert("RGB")
-        width, height = content_image.size
+        o_width, o_height = content_image.size
         style_image = Image.open(style_image).convert("RGB")
         generator = torch.Generator(device="cuda").manual_seed(seed)
         control_images = preprocess_image(content_image)
-        if width < height:
+        if o_width > o_height:
             width = BASE_SIZE["sd"]
-            height = int(BASE_SIZE["sd"] * (height / width))
+            height = int(BASE_SIZE["sd"] * (o_height / o_width))
             height = (height // 8) * 8
         else:
             height = BASE_SIZE["sd"]
-            width = int(BASE_SIZE["sd"] * (width / height))
+            width = int(BASE_SIZE["sd"] * (o_width / o_height))
             width = (width // 8) * 8
         images = self.pipe(
             prompt=prompt,
