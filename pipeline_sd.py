@@ -1,4 +1,4 @@
-from diffusers import StableDiffusionControlNetPipeline, ControlNetModel
+from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, EulerAncestralDiscreteScheduler
 import torch
 from controlnet_aux.processor import Processor
 
@@ -19,8 +19,9 @@ def load_pipeline():
     )
 
     pipe.load_ip_adapter(
-        "h94/IP-Adapter", subfolder="models", weight_name="ip-adapter_sd15.bin"
+        "h94/IP-Adapter", subfolder="models", weight_name="ip-adapter-plus_sd15.bin"
     )
+    pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
     pipe.to("cuda")
     return pipe
 
